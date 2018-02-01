@@ -1,0 +1,65 @@
+{
+  "paths": {
+    "/articles": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#definitions/Posts"
+            },
+            "description": ""
+          }
+        },
+        "operationId": "get_articles",
+        "summary": "Get all articles"
+      }
+    },
+    "/index": {
+      "get": {
+        "produces": [
+          "text/html"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "index.html"
+          }
+        },
+        "operationId": "index",
+        "summary": "Get index.html"
+      }
+    }
+  },
+  "basePath": "/api/1_0",
+  "swagger": "2.0",
+  "definitions": {
+    "Post": {
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string"
+        }
+      }
+    },
+    "Posts": {
+      "type": "array",
+      "items": {
+        "$ref": "#definitions/Post"
+      }
+    }
+  },
+  "info": {
+    "description": "blog",
+    "title": "blog",
+    "version": "1.0.0"
+  }
+}
