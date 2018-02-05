@@ -9,7 +9,7 @@ class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(60), nullable=False)
     user_password = db.Column(db.String(128), nullable=False)
-    user_email = db.Column(db.String(30), nullable=False)
+    user_email = db.Column(db.String(30), nullable=False, unique=True)
     articles = db.relationship("Article", backref="user")
 
     def __repr__(self):
@@ -21,12 +21,19 @@ class User(db.Model):
 
     def to_json(self):
         dic = self.__dict__
+        # print(dic)
         dic.pop('_sa_instance_state', None)
         return dic
 
     def update(self, data):
         for item in data.items():
             setattr(self, item[0], item[1])
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except:
+            db.session.rollback()
+            db.session.flush()
 
 
 class Article(db.Model):
@@ -52,3 +59,9 @@ class Article(db.Model):
     def update(self, data):
         for item in data.items():
             setattr(self, item[0], item[1])
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except:
+            db.session.rollback()
+            db.session.flush()
