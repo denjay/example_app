@@ -9,7 +9,7 @@ from ..auths import Auth
 parser = reqparse.RequestParser()
 parser.add_argument('user_name', type=str, help='用户名')
 parser.add_argument('user_password', type=str, help='密码')
-parser.add_argument('email', type=str, help='电子邮箱')
+parser.add_argument('user_email', type=str, help='电子邮箱')
 
 
 class Users(Resource):
@@ -60,8 +60,8 @@ class Login(Resource):
 class Register(Resource):
 
     def post(self):
-        data = request.form
-        data = data.to_dict()
+        data = parser.parse_args()
+        print(data)
         user = User(data)
         try:
             db.session.add(user)
@@ -69,5 +69,5 @@ class Register(Resource):
         except:
             db.session.rollback()
             db.session.flush()
-            return {'error': '注册失败'}
+            return {'error': '注册失败'}, 400
         return data
