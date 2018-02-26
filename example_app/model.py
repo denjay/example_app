@@ -21,7 +21,6 @@ class User(db.Model):
 
     def to_json(self):
         dic = self.__dict__
-        # print(dic)
         dic.pop('_sa_instance_state', None)
         return dic
 
@@ -43,6 +42,7 @@ class Article(db.Model):
     article_content = db.Column(db.String(5000), nullable=False)
     article_date = db.Column(db.DateTime, default=datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"))
+    click = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         return self.article_title
@@ -54,6 +54,7 @@ class Article(db.Model):
     def to_json(self):
         dic = self.__dict__
         dic.pop('_sa_instance_state', None)
+        dic['article_date'] = dic['article_date'].strftime('%Y-%m-%d %H:%M:%S')
         return dic
 
     def update(self, data):

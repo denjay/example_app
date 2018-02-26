@@ -16,6 +16,7 @@ class Users(Resource):
 
     def get(self):
         users = User.query.all()
+        # print([user.to_json() for user in users])
         return [user.to_json() for user in users]
 
 
@@ -53,7 +54,7 @@ class Login(Resource):
         user = User.query.filter_by(user_name=username).first_or_404()
         if user.user_password == password:
             token = Auth.encode_auth_token(user.user_id)
-            return {'result': '登录成功'}, 200, {"authorization": "Bearer " + str(token)}
+            return {'result': '登录成功'}, 200, {"Access-Control-Expose-Headers": 'Authorization', "Authorization": "Bearer " + str(token)}
 
 
 class Register(Resource):

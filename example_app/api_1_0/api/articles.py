@@ -1,4 +1,5 @@
-from flask import request, g
+from copy import deepcopy
+from flask import request, jsonify
 from model import db, Article
 from ..auths import Auth
 from . import Resource
@@ -9,7 +10,7 @@ class Articles(Resource):
 
     def get(self):
         articles = Article.query.all()
-        return [article.to_json() for article in articles]
+        return jsonify([article.to_json() for article in articles])
 
     @Auth.login_required
     def post(self):
@@ -33,6 +34,15 @@ class Articles(Resource):
 
 
 class Articles_id(Resource):
+
+    def get(self, articles_id):
+        article = Article.query.filter_by(article_id=articles_id).first_or_404()
+        # 由于提交article到数据库的操作会改变article属性，所以先深拷贝一份article对象
+        article_copy = deepcopy(article)
+        article.click = article.click + 1
+        db.session.add(article)
+        db.session.commit()
+        return article_copy.to_json()
 
     @Auth.login_required
     def delete(self, articles_id):
