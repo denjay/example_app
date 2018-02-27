@@ -1,6 +1,6 @@
 from copy import deepcopy
 from flask import request, jsonify
-from model import db, Article
+from model import db, Article, Comment
 from ..auths import Auth
 from . import Resource
 from .. import schemas
@@ -57,3 +57,9 @@ class Articles_id(Resource):
             db.session.delete(article)
             return {'message': '文章删除成功！'}
         return {'message': '文章删除失败！'}
+
+
+class Articles_id_comments(Resource):
+
+    def get(self, article_id):
+        pass

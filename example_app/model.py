@@ -11,6 +11,7 @@ class User(db.Model):
     user_password = db.Column(db.String(128), nullable=False)
     user_email = db.Column(db.String(30), nullable=False, unique=True)
     articles = db.relationship("Article", backref="user")
+    comments = db.relationship("Comment", backref="user")   
 
     def __repr__(self):
         return self.user_name
@@ -43,7 +44,8 @@ class Article(db.Model):
     article_date = db.Column(db.DateTime, default=datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"))
     click = db.Column(db.Integer, default=0)
-
+    comments = db.relationship("Comment", backref="article")
+    
     def __repr__(self):
         return self.article_title
 
@@ -66,3 +68,15 @@ class Article(db.Model):
         except:
             db.session.rollback()
             db.session.flush()
+
+
+class Comment(db.Model):
+    __tablename__ = "comment"
+    comment_id = db.Column(db.Integer, primary_key=True)
+    comment_content = db.Column(db.String(500), nullable=False)
+    comment_date = db.Column(db.DateTime, default=datetime.utcnow())
+    article_id = db.Column(db.Integer, db.ForeignKey("article.article_id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"))
+
+    def __repr__(self):
+        return self.comment_content
