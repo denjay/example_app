@@ -11,7 +11,14 @@ class Articles(Resource):
 
     def get(self):
         articles = Article.query.all()
-        return jsonify([article.to_json() for article in articles])
+        # return jsonify([article.to_json() for article in articles])
+        articles_json = []
+        for article in articles:
+            article_json = article.to_json()
+            article_json["article_content"] = article_json["article_content"][0:200]
+            articles_json.append(article_json)
+        return jsonify(articles_json)
+
 
     @Auth.login_required
     def post(self):
